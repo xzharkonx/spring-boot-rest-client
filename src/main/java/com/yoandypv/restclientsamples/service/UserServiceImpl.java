@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 public class UserServiceImpl extends AbstractClient implements UserService {
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(RestTemplate restTemplate) {
         super(restTemplate);
@@ -23,7 +24,7 @@ public class UserServiceImpl extends AbstractClient implements UserService {
         log.info("Going to create {}", user);
         ResponseEntity<RegisteredUserResponse> response = restTemplate.postForEntity(uri, user, RegisteredUserResponse.class);
         if (response.getStatusCode().is2xxSuccessful()) {
-            log.info("Successfully user creation: {}", response.getBody().getStatus());
+            log.info("Successfully user creation: {}", response.getBody().toString());
             return response.getBody();
         }
         log.error("Error in user creation - httpStatus was: {}", response.getStatusCode());
@@ -37,7 +38,7 @@ public class UserServiceImpl extends AbstractClient implements UserService {
         log.info("Going to login {}", loginRequest);
         ResponseEntity<LoginResponse> response = restTemplate.postForEntity(uri, loginRequest, LoginResponse.class);
         if (response.getStatusCode().is2xxSuccessful()) {
-            log.info("Successfully user creation: {}", response.getBody().getStatus());
+            log.info("Successfully user creation: {}", response.getBody().toString());
             return response.getBody();
         }
         log.error("Error in user login - httpStatus was: {}", response.getStatusCode());

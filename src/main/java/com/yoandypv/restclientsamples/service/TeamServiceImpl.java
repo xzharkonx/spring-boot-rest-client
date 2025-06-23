@@ -12,8 +12,11 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class TeamServiceImpl extends AbstractClient implements TeamService {
 
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TeamServiceImpl.class);
+
     public TeamServiceImpl(RestTemplate restTemplate) {
         super(restTemplate);
+        
     }
     @Override
     public TeamResponse findAll(String token) {
@@ -23,10 +26,12 @@ public class TeamServiceImpl extends AbstractClient implements TeamService {
                 uri, HttpMethod.GET, requestEntity , TeamResponse.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            log.info("Successfully user creation: {}", response.getBody().getStatus());
+ 
+        	String status = response.getBody().status;
+            log.info("Successfully user creation: {}", status);
             return response.getBody();
         }
-        log.error("Error in user creation - httpStatus was: {}", response.getStatusCode());
+        log.error("Error in user creation - httpStatus was: {}", response.getStatusCode().toString());
         throw new RuntimeException("Error");
     }
 
